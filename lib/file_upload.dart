@@ -15,8 +15,10 @@ class FileUploadWithHttp extends StatefulWidget {
 }
 
 class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
-  PlatformFile objFile = PlatformFile(name: 'no file', size: 0);
+  //PlatformFile objFile = PlatformFile(name: 'no file', size: 0);
   bool _isLoadingList = false;
+  String _isLoadingCard = "";
+
   var selectedCard;
 
   var files = [];
@@ -24,18 +26,27 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
   void chooseFileUsingFilePicker() async {
     //-----pick file by file picker,
 
-    var result = await FilePicker.platform.pickFiles(
+    var response = await FilePicker.platform.pickFiles(
       withReadStream:
           true, // this will return PlatformFile object with read stream
     );
-    if (result != null) {
+    //if I don't pick a file result is null
+    if (response != null) {
+      PlatformFile objFile = response.files.single;
       setState(() {
-        objFile = result.files.single;
+        _isLoadingCard = objFile.name;
+        files.add(objFile.name);
       });
+      var uploadStatusCode = await uploadSelectedFile(objFile);
+      if (uploadStatusCode == 201) {
+        //change the status
+      } else {
+        //TODO HANDLE ERROR
+      }
     }
   }
 
-  void uploadSelectedFile() async {
+  uploadSelectedFile(PlatformFile objFile) async {
 //---Create http package multipart request object
     final request = http.MultipartRequest(
       "POST",
@@ -54,11 +65,10 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
     //-------Send request
     var resp = await request.send();
 
-    //------Read response
-    String result = await resp.stream.bytesToString();
+    return resp.statusCode;
 
-    //-------Your response
-    print(result);
+    //------The response message
+    //return resp.stream.bytesToString();
   }
 
   void updateFileList() async {
@@ -122,13 +132,10 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
         TextButton(
             child: Text("Choose File"),
             onPressed: () => chooseFileUsingFilePicker()),
-        //------Show file name when file is selected
-        if (objFile != null) Text("File name : ${objFile.name}"),
-        //------Show file size when file is selected
-        if (objFile != null) Text("File size : ${objFile.size} bytes"),
+
+        //todo send also file size
+        //if (objFile != null) Text("File size : ${objFile.size} bytes"),
         //------Show upload utton when file is selected
-        TextButton(
-            child: Text("Upload"), onPressed: () => uploadSelectedFile()),
       ],
     );
   }
