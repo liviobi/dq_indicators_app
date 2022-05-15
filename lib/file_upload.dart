@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'api.dart';
+import 'screens/indicators.dart';
 
 class FileUploadWithHttp extends StatefulWidget {
   const FileUploadWithHttp({Key? key}) : super(key: key);
@@ -127,7 +128,7 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
-                child: Text(
+                child: const Text(
                   "Upload File",
                 ),
                 onPressed: _isLoadingCard == "" && !_isLoadingList
@@ -146,9 +147,11 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
                   onPressed: _isLoadingCard == "" &&
                           selectedCard != "" &&
                           !errorFiles.contains(selectedCard)
-                      ? () => chooseFileUsingFilePicker()
+                      ? () => Navigator.pushNamed(
+                          context, IndicatorsScreen.routeName,
+                          arguments: selectedCard)
                       : null,
-                  child: Text(
+                  child: const Text(
                     "Get Results",
                   ),
                 ),

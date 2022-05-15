@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'screens/home_page.dart';
+import 'screens/indicators.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +19,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Data Quality Indicators For Text'),
+      initialRoute: '/',
+      routes: {
+        IndicatorsScreen.routeName: (ctx) => const IndicatorsScreen(),
+      },
     );
   }
 }
