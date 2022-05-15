@@ -19,9 +19,11 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
   bool _isLoadingList = false;
   String _isLoadingCard = "";
 
-  var selectedCard;
+  var selectedCard = "";
 
-  var files = [];
+  var allFiles = [];
+  var loadedFiles = [];
+  var errorFiles = [];
 
   void chooseFileUsingFilePicker() async {
     //-----pick file by file picker,
@@ -35,13 +37,23 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
       PlatformFile objFile = response.files.single;
       setState(() {
         _isLoadingCard = objFile.name;
-        files.add(objFile.name);
+        if (!allFiles.contains(objFile.name)) {
+          allFiles.add(objFile.name);
+        }
       });
-      var uploadStatusCode = await uploadSelectedFile(objFile);
-      if (uploadStatusCode == 201) {
-        //change the status
-      } else {
-        //TODO HANDLE ERROR
+      try {
+        var uploadStatusCode = await uploadSelectedFile(objFile);
+        if (uploadStatusCode == 201) {
+          setState(() => _isLoadingCard = "");
+        } else {
+          //to catch network and sever errors in the same basket
+          throw Error();
+        }
+      } catch (e) {
+        setState(() {
+          errorFiles.add(objFile.name);
+          _isLoadingCard = "";
+        });
       }
     }
   }
@@ -76,10 +88,17 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
       _isLoadingList = true;
     });
     try {
-      final newFiles = await getFiles();
-      if (newFiles.length > 0) {
+      final newFilesNames = await getFiles();
+      if (newFilesNames.length > 0) {
         setState(() {
-          files = newFiles;
+          loadedFiles = newFilesNames;
+          //if a file previously gave error but not now remove it
+          for (var filename in errorFiles) {
+            if (loadedFiles.contains(filename)) {
+              errorFiles.remove(filename);
+            }
+          }
+          allFiles = List.from(loadedFiles)..addAll(errorFiles);
           _isLoadingList = false;
         });
       } else {
@@ -94,7 +113,7 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
     var statusCode = await deleteFile(toDelete);
     if (statusCode == 201) {
       setState(() {
-        files.remove(toDelete);
+        allFiles.remove(toDelete);
       });
     }
     //TODO ADD ERROR MESSAGE
@@ -122,16 +141,46 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
           child: _isLoadingList
               ? const Center(child: LinearProgressIndicator())
               : ListView(children: [
-                  ...files.map((file) {
-                    return ListItem(
-                        file, selectedCard, updateSelectedCard, deleteEntry);
+                  ...allFiles.map((file) {
+                    return ListItem(file, selectedCard, _isLoadingCard,
+                        errorFiles, updateSelectedCard, deleteEntry);
                   }).toList()
                 ]),
         ),
         //------Button to choose file using file picker plugin
-        TextButton(
-            child: Text("Choose File"),
-            onPressed: () => chooseFileUsingFilePicker()),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+                child: Text(
+                  "Upload File",
+                ),
+                onPressed: _isLoadingCard == "" && !_isLoadingList
+                    ? () => chooseFileUsingFilePicker()
+                    : null),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Tooltip(
+                message: _isLoadingCard == "" &&
+                        selectedCard != "" &&
+                        !errorFiles.contains(selectedCard)
+                    ? ""
+                    : "Select a file",
+                child: ElevatedButton(
+                  // or _isLoadingCard != selectedCard if I want to go to the next page without waiting for upload
+                  onPressed: _isLoadingCard == "" &&
+                          selectedCard != "" &&
+                          !errorFiles.contains(selectedCard)
+                      ? () => chooseFileUsingFilePicker()
+                      : null,
+                  child: Text(
+                    "Get Results",
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
 
         //todo send also file size
         //if (objFile != null) Text("File size : ${objFile.size} bytes"),
