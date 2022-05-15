@@ -58,31 +58,6 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
     }
   }
 
-  uploadSelectedFile(PlatformFile objFile) async {
-//---Create http package multipart request object
-    final request = http.MultipartRequest(
-      "POST",
-      Uri.parse("http://127.0.0.1:5000/file"),
-    );
-    //-----add other fields if needed
-    //request.fields["id"] = "abc";
-
-    //-----add selected file with request
-    if (objFile.readStream != null) {
-      request.files.add(http.MultipartFile("file",
-          objFile.readStream ?? http.ByteStream.fromBytes([]), objFile.size,
-          filename: objFile.name));
-    }
-
-    //-------Send request
-    var resp = await request.send();
-
-    return resp.statusCode;
-
-    //------The response message
-    //return resp.stream.bytesToString();
-  }
-
   void updateFileList() async {
     setState(() {
       _isLoadingList = true;
