@@ -4,19 +4,6 @@ import 'dart:convert';
 
 const endPoint = "http://127.0.0.1:5000/";
 
-getIndicator1(filename, indicator) async {
-  Map<String, String> requestBody = <String, String>{
-    'filename': filename,
-    'indicator': indicator,
-  };
-
-  final uri = Uri.http("127.0.0.1:5000", "/indicators", requestBody);
-  final response = await http.get(uri);
-  final jsonData = json.decode(response.body);
-  print(jsonData);
-  return jsonData;
-}
-
 getIndicator(filename, indicator) async {
   Map<String, String> parameters = <String, String>{
     'filename': filename,
@@ -58,7 +45,7 @@ uploadSelectedFile(PlatformFile objFile) async {
 //---Create http package multipart request object
   final request = http.MultipartRequest(
     "POST",
-    Uri.parse("http://127.0.0.1:5000/file"),
+    Uri.parse(endPoint + "file"),
   );
   //-----add other fields if needed
   //request.fields["id"] = "abc";
