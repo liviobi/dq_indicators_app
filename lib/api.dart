@@ -4,10 +4,35 @@ import 'dart:convert';
 
 const endPoint = "http://127.0.0.1:5000/";
 
+getIndicator1(filename, indicator) async {
+  Map<String, String> requestBody = <String, String>{
+    'filename': filename,
+    'indicator': indicator,
+  };
+
+  final uri = Uri.http("127.0.0.1:5000", "/indicators", requestBody);
+  final response = await http.get(uri);
+  final jsonData = json.decode(response.body);
+  print(jsonData);
+  return jsonData;
+}
+
+getIndicator(filename, indicator) async {
+  Map<String, String> parameters = <String, String>{
+    'filename': filename,
+    'indicator': indicator,
+  };
+
+  var response = await http.get(
+      Uri.parse(endPoint + "indicators").replace(queryParameters: parameters));
+
+  final jsonData = json.decode(response.body);
+
+  return jsonData;
+}
+
 getFiles() async {
   var response = await http.get(Uri.parse(endPoint + "file"));
-  //dynamic body = json.decode(response.body);
-  //return body["files"];
 
   final jsonData = json.decode(response.body);
   final files = <String>[];
