@@ -4,9 +4,12 @@ import 'package:frontend/widgets/list_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'api.dart';
-import 'screens/indicators.dart';
+import 'model/indicator.dart';
+import 'model/indicators.dart';
+import 'screens/indicators_screen.dart';
 
 class FileUploadWithHttp extends StatefulWidget {
   const FileUploadWithHttp({Key? key}) : super(key: key);
@@ -109,6 +112,7 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<Indicators>(context);
     return Column(
       children: [
         Container(
@@ -148,8 +152,10 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
                           selectedCard != "" &&
                           !errorFiles.contains(selectedCard)
                       ? () => Navigator.pushNamed(
-                          context, IndicatorsScreen.routeName,
-                          arguments: selectedCard)
+                              context, IndicatorsScreen.routeName,
+                              //when returning set all the values to null
+                              arguments: selectedCard)
+                          .then((_) => db.clear())
                       : null,
                   child: const Text(
                     "Get Results",
