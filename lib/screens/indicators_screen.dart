@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/indicatorCard.dart';
 import 'package:provider/provider.dart';
 
-import '../api.dart';
 import '../model/indicator.dart';
 import '../model/indicators.dart';
 import '../widgets/indicatorCard_stf.dart';
@@ -53,20 +51,19 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
   Widget build(BuildContext context) {
     //TODO re enable
     //final filename = ModalRoute.of(context)!.settings.arguments as String;
-    final filename = "prose.txt";
+    const filename = "prose.txt";
     final List<Indicator> indicators =
         Provider.of<Indicators>(context).indicators;
 
     return Scaffold(
         appBar: AppBar(title: Text("Dashboard for $filename")),
-        body: Center(
-          child: Center(
-            child: Column(children: [
-              ...indicators.map((indicator) {
-                return IndicatorCard(indicator, filename);
-              }).toList()
-            ]),
-          ),
+        body: Container(
+          color: Colors.purple,
+          child: Row(children: [
+            ...indicators.map((indicator) {
+              return IndicatorCard(indicator, filename);
+            }).toList()
+          ]),
         ));
   }
 }

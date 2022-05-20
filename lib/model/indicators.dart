@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'indicator.dart';
 
 class Indicators extends ChangeNotifier {
-  List<Indicator> _indicators = [
+  final List<Indicator> _indicators = [
     Indicator(
         "Parsable sentences", "parsable", "This is a sample description", ""),
     Indicator(

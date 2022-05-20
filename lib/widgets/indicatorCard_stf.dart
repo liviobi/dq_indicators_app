@@ -18,8 +18,7 @@ class IndicatorCard extends StatefulWidget {
 }
 
 class _IndicatorCardState extends State<IndicatorCard> {
-  SfRadialGauge _buildDistanceTrackerExample() {
-    var isCardView = true;
+  SfRadialGauge _buildGauge() {
     return SfRadialGauge(
       enableLoadingAnimation: true,
       axes: <RadialAxis>[
@@ -41,21 +40,20 @@ class _IndicatorCardState extends State<IndicatorCard> {
                               fontWeight: FontWeight.bold,
                               fontStyle: FontStyle.italic,
                               fontSize: 30)),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.fromLTRB(0, 2, 0, 0),
                       )
                     ],
                   )),
-              GaugeAnnotation(
+              const GaugeAnnotation(
                 angle: 124,
                 positionFactor: 1.1,
                 widget: Text('0', style: TextStyle(fontSize: 14)),
               ),
-              GaugeAnnotation(
+              const GaugeAnnotation(
                 angle: 54,
                 positionFactor: 1.1,
-                widget: Text('100',
-                    style: TextStyle(fontSize: isCardView ? 12 : 14)),
+                widget: Text('100', style: TextStyle(fontSize: 14)),
               ),
             ],
             pointers: <GaugePointer>[
@@ -64,7 +62,7 @@ class _IndicatorCardState extends State<IndicatorCard> {
                 width: 18,
                 pointerOffset: -6,
                 cornerStyle: CornerStyle.bothCurve,
-                color: Color(0xFFF67280),
+                color: const Color(0xFFF67280),
                 gradient: const SweepGradient(
                     colors: <Color>[Color(0xFFFF7676), Color(0xFFF54EA2)],
                     stops: <double>[0.25, 0.75]),
@@ -107,13 +105,18 @@ class _IndicatorCardState extends State<IndicatorCard> {
     return Card(
       color: Colors.amber,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 200,
             height: 200,
             child: widget.indicator.value == ""
-                ? CircularProgressIndicator()
-                : _buildDistanceTrackerExample(),
+                ? const Center(
+                    child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: CircularProgressIndicator()))
+                : _buildGauge(),
           ),
           Text("${widget.indicator.name} value: "),
           Text(widget.indicator.value)

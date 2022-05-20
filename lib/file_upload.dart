@@ -1,13 +1,9 @@
-import 'dart:html';
-
 import 'package:frontend/widgets/list_item.dart';
-import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'api.dart';
-import 'model/indicator.dart';
 import 'model/indicators.dart';
 import 'screens/indicators_screen.dart';
 

@@ -12,8 +12,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -41,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'Uploaded files:',
               style: Theme.of(context).textTheme.headline4,
             ),
-            FileUploadWithHttp(),
+            const FileUploadWithHttp(),
           ],
         ),
       ),

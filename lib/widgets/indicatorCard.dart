@@ -1,9 +1,4 @@
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter/material.dart';
-import 'package:frontend/model/indicators.dart';
-import 'package:provider/provider.dart';
 
 import '../model/indicator.dart';
 
