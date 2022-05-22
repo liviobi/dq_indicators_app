@@ -1,4 +1,5 @@
 import 'package:frontend/widgets/checkbox_text.dart';
+import 'package:frontend/widgets/checkbox_text_st.dart';
 import 'package:frontend/widgets/list_item.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -112,13 +113,23 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
     final db = Provider.of<Indicators>(context);
     var indicatorsNames = db.indicatorsName;
 
+    updateIndicatorList(value, indicator) {
+      setState(() {
+        if (value) {
+          indicatorsNames.add(indicator);
+        } else {
+          indicatorsNames.remove(indicator);
+        }
+      });
+    }
+
     return Column(
       children: [
         const Padding(
           padding: EdgeInsets.all(8.0),
           child: Text(
             'Uploaded files:',
-            style: TextStyle(color: Colors.grey, fontSize: 20),
+            style: TextStyle(color: Colors.grey, fontSize: 18),
           ),
         ),
         ConstrainedBox(
@@ -140,29 +151,46 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
           ),
         ),
         ConstrainedBox(
+          //indicators
           constraints: const BoxConstraints(
             minHeight: 100,
             minWidth: 250,
             maxHeight: double.infinity,
             maxWidth: 620,
           ),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.blue,
-              ),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Wrap(
-                children: [
-                  ...indicatorsNames.map((indicatorName) {
-                    return CheckboxText(indicatorName, true, () => {});
-                  }).toList()
+          child: Column(
+            children: [
+              Row(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 2),
+                    child: Text(
+                      "Indicators to compute:",
+                      style: TextStyle(color: Colors.grey, fontSize: 18),
+                    ),
+                  )
                 ],
               ),
-            ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.blue,
+                  ),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    children: [
+                      ...indicatorsNames.map((indicatorName) {
+                        return CheckboxTextSt(
+                            indicatorName, updateIndicatorList);
+                      }).toList()
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         //------Button to choose file using file picker plugin
@@ -194,7 +222,7 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
                         ? () => Navigator.pushNamed(
                                 context, IndicatorsScreen.routeName,
                                 //when returning set all the values to null
-                                arguments: selectedCard)
+                                arguments: [selectedCard, indicatorsNames])
                             .then((_) => db.clear())
                         : null,
                     child: const Text(

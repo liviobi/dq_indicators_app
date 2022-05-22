@@ -9,39 +9,6 @@ class IndicatorsScreen extends StatefulWidget {
   IndicatorsScreen({Key? key}) : super(key: key);
   static const routeName = '/indicators';
 
-  var indicatorsTemplate = {
-    //"Confidence": {
-    //  "searchKeys": [
-    //    {"searchKey": "confidence_tokenizer", "name": "Confidence of Tokenizer", "value":null},
-    //    {"searchKey": "confidence_pos", "name": "POS", "value":null},
-    //    {"searchKey": "confidence_ner", "name": "NER", "value":null},
-    //    {"searchKey": "confidence_chunker", "name": "Chunker", "value":null},
-    //  ],
-    //  "description": "This is a sample description"
-    //},
-    "Parsable sentences": {
-      "searchKeys": [
-        {"searchKey": "parsable", "name": "Parsable sentences", "value": null},
-      ],
-      "description": "This is a sample description"
-    },
-    "Fit of training data": {
-      "searchKeys": [
-        {"searchKey": "fit", "name": "Fit of training data", "value": null},
-      ],
-      "description": "This is a sample description"
-    },
-  };
-
-  //indicatorsTemplate = {
-  //  "spelling_mistakes": None,
-  //  "avg_sentence_len": None,
-  //  "perc_lowercase": None,
-  //  "perc_uppercase": None,
-  //  "lexical_diversity": None,
-  //  "unknown_words": None,
-  //  "acronyms": None, }
-
   @override
   State<IndicatorsScreen> createState() => _IndicatorsScreenState();
 }
@@ -50,20 +17,39 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
   @override
   Widget build(BuildContext context) {
     //TODO re enable
-    //final filename = ModalRoute.of(context)!.settings.arguments as String;
-    const filename = "prose.txt";
+    List<dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as List<dynamic>;
+    final filename = args[0] as String;
+    final selectedIndicatorsNames = args[1] as List<dynamic>;
+
+    print(selectedIndicatorsNames);
+
+    //const filename = "prose.txt";
+
     final List<Indicator> indicators =
         Provider.of<Indicators>(context).indicators;
 
     return Scaffold(
         appBar: AppBar(title: Text("Dashboard for $filename")),
-        body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Wrap(children: [
-            ...indicators.map((indicator) {
-              return IndicatorCard(indicator, filename);
-            }).toList()
-          ]),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Wrap(children: [
+                ...selectedIndicatorsNames.map((indicator) {
+                  return Text(indicator);
+                }).toList()
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Wrap(children: [
+                ...indicators.map((indicator) {
+                  return IndicatorCard(indicator, filename);
+                }).toList()
+              ]),
+            ),
+          ],
         ));
   }
 }

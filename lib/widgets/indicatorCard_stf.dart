@@ -102,31 +102,34 @@ class _IndicatorCardState extends State<IndicatorCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(5, 5, 0, 8),
-            child: Text(
-              widget.indicator.name,
-              style: const TextStyle(fontWeight: FontWeight.w600),
+    return Tooltip(
+      message: widget.indicator.description,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 5, 0, 8),
+              child: Text(
+                widget.indicator.name,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
             ),
-          ),
-          Container(
-            width: 200,
-            height: 200,
-            child: widget.indicator.value == ""
-                ? const Center(
-                    child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: CircularProgressIndicator()))
-                : _buildGauge(),
-          ),
-        ],
+            Container(
+              width: 200,
+              height: 200,
+              child: widget.indicator.value == ""
+                  ? const Center(
+                      child: SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: CircularProgressIndicator()))
+                  : _buildGauge(),
+            ),
+          ],
+        ),
       ),
     );
   }

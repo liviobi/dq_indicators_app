@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class CheckboxText extends StatelessWidget {
   final indicatorName;
   var value;
-  final Function onChanged;
-  CheckboxText(this.indicatorName, this.value, this.onChanged, {Key? key})
+  final Function updateIndicatorList;
+  CheckboxText(this.indicatorName, this.value, this.updateIndicatorList,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -14,7 +15,12 @@ class CheckboxText extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Checkbox(value: value, onChanged: (_) => onChanged(indicatorName)),
+          Checkbox(
+              value: value,
+              onChanged: (value) {
+                print("clicked");
+                updateIndicatorList(value, indicatorName);
+              }),
           Text(indicatorName)
         ],
       ),
