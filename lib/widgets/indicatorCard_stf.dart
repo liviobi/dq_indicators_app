@@ -103,10 +103,18 @@ class _IndicatorCardState extends State<IndicatorCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.amber,
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(5, 5, 0, 8),
+            child: Text(
+              widget.indicator.name,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ),
           Container(
             width: 200,
             height: 200,
@@ -118,8 +126,6 @@ class _IndicatorCardState extends State<IndicatorCard> {
                         child: CircularProgressIndicator()))
                 : _buildGauge(),
           ),
-          Text("${widget.indicator.name} value: "),
-          Text(widget.indicator.value)
         ],
       ),
     );
