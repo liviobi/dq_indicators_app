@@ -20,14 +20,11 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
     List<dynamic> args =
         ModalRoute.of(context)!.settings.arguments as List<dynamic>;
     final filename = args[0] as String;
-    final selectedIndicatorsNames = args[1] as List<dynamic>;
-
-    print(selectedIndicatorsNames);
+    //final selectedIndicatorsNames = args[1] as List<dynamic>;
 
     //const filename = "prose.txt";
-
-    final List<Indicator> indicators =
-        Provider.of<Indicators>(context).indicators;
+    final db = Provider.of<Indicators>(context);
+    final List checkedIndicators = db.checkedIndicators;
 
     return Scaffold(
         appBar: AppBar(title: Text("Dashboard for $filename")),
@@ -36,15 +33,7 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Wrap(children: [
-                ...selectedIndicatorsNames.map((indicator) {
-                  return Text(indicator);
-                }).toList()
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Wrap(children: [
-                ...indicators.map((indicator) {
+                ...checkedIndicators.map((indicator) {
                   return IndicatorCard(indicator, filename);
                 }).toList()
               ]),

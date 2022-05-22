@@ -47,6 +47,45 @@ class Indicators extends ChangeNotifier {
     return result;
   }
 
+  List get checkedNames {
+    final result = [];
+    for (Indicator indicator in _indicators) {
+      if (indicator.checked == true) {
+        result.add(indicator.name);
+      }
+    }
+    return result;
+  }
+
+  get checkedIndicators {
+    var result = [];
+    for (Indicator indicator in _indicators) {
+      if (checkedNames.contains(indicator.name)) {
+        result.add(indicator);
+      }
+    }
+    return result;
+  }
+
+  Indicator getIndicatorByName(name) {
+    for (Indicator indicator in _indicators) {
+      if (indicator.name == name) {
+        return indicator;
+      }
+    }
+    throw Exception();
+  }
+
+  void toggleIndicator(name) {
+    Indicator indicator = getIndicatorByName(name);
+    if (indicator.checked == true) {
+      indicator.checked = false;
+    } else {
+      indicator.checked = true;
+    }
+    notifyListeners();
+  }
+
   void clear() {
     for (Indicator indicator in _indicators) {
       indicator.value = "";

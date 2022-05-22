@@ -111,15 +111,10 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<Indicators>(context);
-    var indicatorsNames = db.indicatorsName;
 
-    updateIndicatorList(value, indicator) {
+    updateIndicatorList(indicatorName) {
       setState(() {
-        if (value) {
-          indicatorsNames.add(indicator);
-        } else {
-          indicatorsNames.remove(indicator);
-        }
+        db.toggleIndicator(indicatorName);
       });
     }
 
@@ -182,9 +177,9 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
                   padding: const EdgeInsets.all(8.0),
                   child: Wrap(
                     children: [
-                      ...indicatorsNames.map((indicatorName) {
-                        return CheckboxTextSt(
-                            indicatorName, updateIndicatorList);
+                      ...db.indicators.map((indicator) {
+                        return CheckboxText(indicator.name, indicator.checked,
+                            updateIndicatorList);
                       }).toList()
                     ],
                   ),
@@ -220,10 +215,9 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
                             selectedCard != "" &&
                             !errorFiles.contains(selectedCard)
                         ? () => Navigator.pushNamed(
-                                context, IndicatorsScreen.routeName,
-                                //when returning set all the values to null
-                                arguments: [selectedCard, indicatorsNames])
-                            .then((_) => db.clear())
+                            context, IndicatorsScreen.routeName,
+                            //when returning set all the values to null
+                            arguments: [selectedCard]).then((_) => db.clear())
                         : null,
                     child: const Text(
                       "Get Results",

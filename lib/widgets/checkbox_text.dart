@@ -17,9 +17,8 @@ class CheckboxText extends StatelessWidget {
         children: [
           Checkbox(
               value: value,
-              onChanged: (value) {
-                print("clicked");
-                updateIndicatorList(value, indicatorName);
+              onChanged: (_) {
+                updateIndicatorList(indicatorName);
               }),
           Text(indicatorName)
         ],
