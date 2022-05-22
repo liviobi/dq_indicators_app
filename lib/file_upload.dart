@@ -1,3 +1,4 @@
+import 'package:frontend/widgets/checkbox_text.dart';
 import 'package:frontend/widgets/list_item.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -109,57 +110,101 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<Indicators>(context);
+    var indicatorsNames = db.indicatorsName;
+
     return Column(
       children: [
-        Container(
-          height: 250,
-          width: 350,
-          child: _isLoadingList
-              ? const Center(child: LinearProgressIndicator())
-              : ListView(children: [
-                  ...allFiles.map((file) {
-                    return ListItem(file, selectedCard, _isLoadingCard,
-                        errorFiles, updateSelectedCard, deleteEntry);
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Uploaded files:',
+            style: TextStyle(color: Colors.grey, fontSize: 20),
+          ),
+        ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: 100,
+            minWidth: 250,
+            maxHeight: 300,
+            maxWidth: 400,
+          ),
+          child: Container(
+            child: _isLoadingList
+                ? const Center(child: LinearProgressIndicator())
+                : ListView(children: [
+                    ...allFiles.map((file) {
+                      return ListItem(file, selectedCard, _isLoadingCard,
+                          errorFiles, updateSelectedCard, deleteEntry);
+                    }).toList()
+                  ]),
+          ),
+        ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: 100,
+            minWidth: 250,
+            maxHeight: double.infinity,
+            maxWidth: 620,
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.blue,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Wrap(
+                children: [
+                  ...indicatorsNames.map((indicatorName) {
+                    return CheckboxText(indicatorName, true, () => {});
                   }).toList()
-                ]),
+                ],
+              ),
+            ),
+          ),
         ),
         //------Button to choose file using file picker plugin
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-                child: const Text(
-                  "Upload File",
-                ),
-                onPressed: _isLoadingCard == "" && !_isLoadingList
-                    ? () => chooseFileUsingFilePicker()
-                    : null),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Tooltip(
-                message: _isLoadingCard == "" &&
-                        selectedCard != "" &&
-                        !errorFiles.contains(selectedCard)
-                    ? ""
-                    : "Select a file",
-                child: ElevatedButton(
-                  // or _isLoadingCard != selectedCard if I want to go to the next page without waiting for upload
-                  onPressed: _isLoadingCard == "" &&
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                  child: const Text(
+                    "Upload File",
+                  ),
+                  onPressed: _isLoadingCard == "" && !_isLoadingList
+                      ? () => chooseFileUsingFilePicker()
+                      : null),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Tooltip(
+                  message: _isLoadingCard == "" &&
                           selectedCard != "" &&
                           !errorFiles.contains(selectedCard)
-                      ? () => Navigator.pushNamed(
-                              context, IndicatorsScreen.routeName,
-                              //when returning set all the values to null
-                              arguments: selectedCard)
-                          .then((_) => db.clear())
-                      : null,
-                  child: const Text(
-                    "Get Results",
+                      ? ""
+                      : "Select a file",
+                  child: ElevatedButton(
+                    // or _isLoadingCard != selectedCard if I want to go to the next page without waiting for upload
+                    onPressed: _isLoadingCard == "" &&
+                            selectedCard != "" &&
+                            !errorFiles.contains(selectedCard)
+                        ? () => Navigator.pushNamed(
+                                context, IndicatorsScreen.routeName,
+                                //when returning set all the values to null
+                                arguments: selectedCard)
+                            .then((_) => db.clear())
+                        : null,
+                    child: const Text(
+                      "Get Results",
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
 
         //todo send also file size

@@ -57,9 +57,9 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
 
     return Scaffold(
         appBar: AppBar(title: Text("Dashboard for $filename")),
-        body: Container(
-          color: Colors.purple,
-          child: Row(children: [
+        body: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Wrap(children: [
             ...indicators.map((indicator) {
               return IndicatorCard(indicator, filename);
             }).toList()
