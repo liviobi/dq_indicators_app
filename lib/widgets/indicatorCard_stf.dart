@@ -82,7 +82,11 @@ class _IndicatorCardState extends State<IndicatorCard> {
         await getIndicator(widget.filename, widget.indicator.searchKey);
     if (jsonData["indicator"] != "processing") {
       setState(() {
-        widget.indicator.value = jsonData["indicator"];
+        var indicator = jsonData["indicator"];
+        if (indicator == "100.") {
+          indicator = "100";
+        }
+        widget.indicator.value = indicator;
       });
     }
   }

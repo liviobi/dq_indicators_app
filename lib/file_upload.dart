@@ -158,7 +158,7 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
               Row(
                 children: const [
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 2),
+                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                     child: Text(
                       "Indicators to compute:",
                       style: TextStyle(color: Colors.grey, fontSize: 18),
