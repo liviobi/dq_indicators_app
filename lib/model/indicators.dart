@@ -8,8 +8,7 @@ class Indicators extends ChangeNotifier {
   final List<Indicator> _indicators = [
     Indicator(
         "Parsable sentences", "parsable", "This is a sample description", ""),
-    Indicator(
-        "Fit of training data", "fit", "This is a sample description", ""),
+    //Indicator("Fit of training data", "fit", "This is a sample description", ""),
     Indicator("Lexical diversity", "lexical_diversity",
         "This is a sample description", ""),
     Indicator("Correctly spelled", "spelling_mistakes",
