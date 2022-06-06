@@ -28,17 +28,19 @@ class _IndicatorsScreenState extends State<IndicatorsScreen> {
 
     return Scaffold(
         appBar: AppBar(title: Text("Dashboard for $filename")),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Wrap(children: [
-                ...checkedIndicators.map((indicator) {
-                  return IndicatorCard(indicator, filename);
-                }).toList()
-              ]),
-            ),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Wrap(children: [
+                  ...checkedIndicators.map((indicator) {
+                    return IndicatorCard(indicator, filename);
+                  }).toList()
+                ]),
+              ),
+            ],
+          ),
         ));
   }
 }

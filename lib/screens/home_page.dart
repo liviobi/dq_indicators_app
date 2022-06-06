@@ -26,17 +26,19 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            // Invoke "debug painting" (press "p" in the console, choose the
+            // "Toggle Debug Paint" action from the Flutter Inspector in Android
+            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+            // to see the wireframe for each widget.
 
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const FileUploadWithHttp(),
-          ],
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const FileUploadWithHttp(),
+            ],
+          ),
         ),
       ),
     );

@@ -31,6 +31,7 @@ class Indicators extends ChangeNotifier {
         "Confidence NER", "confidence_ner", "This is a sample description", ""),
     Indicator("Confidence Chunker", "confidence_chunker",
         "This is a sample description", ""),
+    Indicator("Acronyms", "acronyms", "This is a sample description", ""),
   ];
 
   List<Indicator> get indicators {
