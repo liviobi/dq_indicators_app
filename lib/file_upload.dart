@@ -19,7 +19,9 @@ class FileUploadWithHttp extends StatefulWidget {
 class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
   //PlatformFile objFile = PlatformFile(name: 'no file', size: 0);
   bool _isLoadingList = false;
+  bool _showFileTooBigError = false;
   String _isLoadingCard = "";
+  final int _maxFileSize = 512000;
 
   var selectedCard = "";
 
@@ -34,29 +36,40 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
       withReadStream:
           true, // this will return PlatformFile object with read stream
     );
+
     //if I don't pick a file result is null
-    if (response != null) {
-      PlatformFile objFile = response.files.single;
+    if (response == null) {
+      return;
+    }
+
+    PlatformFile objFile = response.files.single;
+    //-----check file size
+    if (objFile.size > _maxFileSize) {
       setState(() {
-        _isLoadingCard = objFile.name;
-        if (!allFiles.contains(objFile.name)) {
-          allFiles.add(objFile.name);
-        }
+        _showFileTooBigError = true;
       });
-      try {
-        var uploadStatusCode = await uploadSelectedFile(objFile);
-        if (uploadStatusCode == 201) {
-          setState(() => _isLoadingCard = "");
-        } else {
-          //to catch network and sever errors in the same basket
-          throw Error();
-        }
-      } catch (e) {
-        setState(() {
-          errorFiles.add(objFile.name);
-          _isLoadingCard = "";
-        });
+      return;
+    }
+    setState(() {
+      _showFileTooBigError = false;
+      _isLoadingCard = objFile.name;
+      if (!allFiles.contains(objFile.name)) {
+        allFiles.add(objFile.name);
       }
+    });
+    try {
+      var uploadStatusCode = await uploadSelectedFile(objFile);
+      if (uploadStatusCode == 201) {
+        setState(() => _isLoadingCard = "");
+      } else {
+        //to catch network and sever errors in the same basket
+        throw Error();
+      }
+    } catch (e) {
+      setState(() {
+        errorFiles.add(objFile.name);
+        _isLoadingCard = "";
+      });
     }
   }
 
@@ -99,6 +112,7 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
   updateSelectedCard(newSelectedCard) {
     setState(() {
       selectedCard = newSelectedCard;
+      _showFileTooBigError = false;
     });
   }
 
@@ -145,6 +159,11 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
                   ]),
           ),
         ),
+        _showFileTooBigError
+            ? Text("Max file size is ${_maxFileSize / 1024} KB",
+                style: const TextStyle(color: Colors.red))
+            : Container(),
+        //indicators
         ConstrainedBox(
           //indicators
           constraints: const BoxConstraints(
