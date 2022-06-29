@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/model/selecte_file_model.dart';
 import 'package:provider/provider.dart';
 
 import '../model/indicators.dart';
@@ -15,16 +16,14 @@ class IndicatorsScreen extends StatefulWidget {
 class _IndicatorsScreenState extends State<IndicatorsScreen> {
   @override
   Widget build(BuildContext context) {
-    //TODO re enable
-    List<dynamic> args =
-        ModalRoute.of(context)!.settings.arguments as List<dynamic>;
-    final filename = args[0] as String;
-    //final selectedIndicatorsNames = args[1] as List<dynamic>;
+    final selectedFileProvider = Provider.of<SelectedFileModel>(context);
+    final filename = selectedFileProvider.filename;
 
-    //const filename = "prose.txt";
     final db = Provider.of<Indicators>(context);
-    final List checkedIndicators = db.checkedIndicators;
-
+    List checkedIndicators = db.checkedIndicators;
+    if (checkedIndicators.isEmpty) {
+      checkedIndicators = db.indicators;
+    }
     return Scaffold(
         appBar: AppBar(title: Text("Dashboard for $filename")),
         body: SingleChildScrollView(

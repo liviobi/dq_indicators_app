@@ -1,3 +1,4 @@
+import 'package:frontend/model/selecte_file_model.dart';
 import 'package:frontend/widgets/checkbox_text.dart';
 import 'package:frontend/widgets/checkbox_text_st.dart';
 import 'package:frontend/widgets/list_item.dart';
@@ -22,8 +23,6 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
   bool _showFileTooBigError = false;
   String _isLoadingCard = "";
   final int _maxFileSize = 512000;
-
-  var selectedCard = "";
 
   var allFiles = [];
   var loadedFiles = [];
@@ -109,13 +108,6 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
     //TODO ADD ERROR MESSAGE
   }
 
-  updateSelectedCard(newSelectedCard) {
-    setState(() {
-      selectedCard = newSelectedCard;
-      _showFileTooBigError = false;
-    });
-  }
-
   @override
   void initState() {
     updateFileList();
@@ -125,6 +117,14 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<Indicators>(context);
+    final selectedFileProvider = Provider.of<SelectedFileModel>(context);
+
+    updateSelectedCard(newSelectedCard) {
+      setState(() {
+        selectedFileProvider.filename = newSelectedCard;
+        _showFileTooBigError = false;
+      });
+    }
 
     updateIndicatorList(indicatorName) {
       setState(() {
@@ -153,8 +153,13 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
                 ? const Center(child: LinearProgressIndicator())
                 : ListView(children: [
                     ...allFiles.map((file) {
-                      return ListItem(file, selectedCard, _isLoadingCard,
-                          errorFiles, updateSelectedCard, deleteEntry);
+                      return ListItem(
+                          file,
+                          selectedFileProvider.filename,
+                          _isLoadingCard,
+                          errorFiles,
+                          updateSelectedCard,
+                          deleteEntry);
                     }).toList()
                   ]),
           ),
@@ -224,19 +229,20 @@ class _FileUploadWithHttpState extends State<FileUploadWithHttp> {
                 padding: const EdgeInsets.only(left: 20),
                 child: Tooltip(
                   message: _isLoadingCard == "" &&
-                          selectedCard != "" &&
-                          !errorFiles.contains(selectedCard)
+                          selectedFileProvider.filename != "" &&
+                          !errorFiles.contains(selectedFileProvider.filename)
                       ? ""
                       : "Select a file",
                   child: ElevatedButton(
                     // or _isLoadingCard != selectedCard if I want to go to the next page without waiting for upload
                     onPressed: _isLoadingCard == "" &&
-                            selectedCard != "" &&
-                            !errorFiles.contains(selectedCard)
+                            selectedFileProvider.filename != "" &&
+                            !errorFiles.contains(selectedFileProvider.filename)
                         ? () => Navigator.pushNamed(
-                            context, IndicatorsScreen.routeName,
-                            //when returning set all the values to null
-                            arguments: [selectedCard]).then((_) => db.clear())
+                                context, IndicatorsScreen.routeName,
+                                //when returning set all the values to null
+                                arguments: [selectedFileProvider.filename])
+                            .then((_) => db.clear())
                         : null,
                     child: const Text(
                       "Get Results",
