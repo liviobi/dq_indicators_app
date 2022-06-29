@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../model/indicator.dart';
 import '../model/indicators.dart';
 import '../widgets/indicatorCard_stf.dart';
 
 class IndicatorsScreen extends StatefulWidget {
-  IndicatorsScreen({Key? key}) : super(key: key);
+  const IndicatorsScreen({Key? key}) : super(key: key);
   static const routeName = '/indicators';
 
   @override

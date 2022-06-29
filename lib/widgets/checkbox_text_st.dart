@@ -1,12 +1,9 @@
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter/material.dart';
 
 class CheckboxTextSt extends StatefulWidget {
   final indicatorName;
   final Function updateIndicatorList;
-  CheckboxTextSt(this.indicatorName, this.updateIndicatorList, {Key? key})
+  const CheckboxTextSt(this.indicatorName, this.updateIndicatorList, {Key? key})
       : super(key: key);
 
   @override
@@ -18,7 +15,7 @@ class _CheckboxTextStState extends State<CheckboxTextSt> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 200,
       child: Row(
         mainAxisSize: MainAxisSize.min,

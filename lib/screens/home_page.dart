@@ -22,8 +22,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const FileUploadWithHttp(),
+            children: const <Widget>[
+              FileUploadWithHttp(),
             ],
           ),
         ),
