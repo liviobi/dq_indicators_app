@@ -97,11 +97,11 @@ class _IndicatorCardState extends State<IndicatorCard> {
   void initState() {
     super.initState();
     _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      print("sending request for ${widget.indicator.name}");
+      //print("sending request for ${widget.indicator.name}");
       updateIndicatorCard();
       if (widget.indicator.value != "") {
         timer.cancel();
-        print("result recieved, cancelling timer for ${widget.indicator.name}");
+        //print("result recieved, cancelling timer for ${widget.indicator.name}");
       }
     });
   }
