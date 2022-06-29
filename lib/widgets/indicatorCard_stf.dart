@@ -18,6 +18,8 @@ class IndicatorCard extends StatefulWidget {
 }
 
 class _IndicatorCardState extends State<IndicatorCard> {
+  late Timer _timer;
+
   SfRadialGauge _buildGauge() {
     return SfRadialGauge(
       enableLoadingAnimation: true,
@@ -94,7 +96,7 @@ class _IndicatorCardState extends State<IndicatorCard> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       print("sending request for ${widget.indicator.name}");
       updateIndicatorCard();
       if (widget.indicator.value != "") {
@@ -102,6 +104,12 @@ class _IndicatorCardState extends State<IndicatorCard> {
         print("result recieved, cancelling timer for ${widget.indicator.name}");
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
