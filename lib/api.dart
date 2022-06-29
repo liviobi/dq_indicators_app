@@ -2,7 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const endPoint = "http://127.0.0.1:5000/";
+const endPoint = "http://13.36.211.157:5000/";
+//const endPoint = "http://127.0.0.1:5000/";
 
 getIndicator(filename, indicator) async {
   Map<String, String> parameters = <String, String>{
