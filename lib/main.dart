@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         child: ChangeNotifierProvider(
             create: (_) => Indicators(),
             child: MaterialApp(
-              title: 'Flutter Demo',
+              title: 'DQ Tool',
               theme: ThemeData(
                 primarySwatch: Colors.blue,
               ),
